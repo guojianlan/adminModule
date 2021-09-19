@@ -1,0 +1,59 @@
+{
+  "name": "nestjs-admin-module",
+  "version": "1.0.0",
+  "description": "nestjs common admin crud module controller service",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "rm -rf ./dist && tsc && npm run build:index",
+    "build:index": "rm -rf ./index.js ./index.d.ts && tsc -d --skipLibCheck ./index.ts"
+  },
+  "homepage": "https://github.com/guojianlan/abstractorModule#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guojianlan/abstractorModule"
+  },
+  "keywords": [
+    "crud",
+    "NestJS",
+    "nestjs",
+    "Nest",
+    "NestJS crud",
+    "typeorm",
+    "NestJS typeorm",
+    "NestJS RESTful APIs",
+    "NestJS admin module"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nestjs/mapped-types": "^1.0.0",
+    "@types/node": "^16.6.1",
+    "nestjs-abstract-module": "^1.1.5",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "jsonwebtoken": "^8.5.1",
+    "rxjs": "^7.2.0",
+    "svg-captcha": "^1.4.0",
+    "bcrypt": "^5.0.1"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.0",
+    "reflect-metadata": "^0.1.13",
+    "@nestjs/typeorm": "^8.0.1",
+    "typeorm": "^0.2.35"
+  },
+  "devDependencies": {
+    "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/common": "^8.0.0",
+    "reflect-metadata": "^0.1.13",
+    "@types/bcrypt": "^5.0.0",
+    "@nestjs/core": "^8.0.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.5",
+    "@nestjs/typeorm": "^8.0.1",
+    "typeorm": "^0.2.35"
+  }
+}
