@@ -1,6 +1,6 @@
 {
   "name": "nestjs-admin-module",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "nestjs common admin crud module controller service",
   "main": "dist/index.js",
   "files": [
@@ -31,13 +31,13 @@
   "dependencies": {
     "@nestjs/mapped-types": "^1.0.0",
     "@types/node": "^16.6.1",
-    "nestjs-abstract-module": "^1.1.7",
+    "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "jsonwebtoken": "^8.5.1",
+    "nestjs-abstract-module": "^1.1.8",
     "rxjs": "^7.2.0",
-    "svg-captcha": "^1.4.0",
-    "bcrypt": "^5.0.1"
+    "svg-captcha": "^1.4.0"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.0.0",

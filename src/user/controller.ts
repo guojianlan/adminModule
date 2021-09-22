@@ -54,7 +54,7 @@ export class AdminUserController
   ) {
     //创建管理员
     const user = await this.service.find();
-    if (!user) {
+    if (user == undefined || user?.list?.length==0) {
       await this.service.checkCode(body.code, req);
       return this.service.registerByUserName({
         ...body,
