@@ -1,7 +1,6 @@
-import { IJwtOptions } from './types';
+import {IAdminGlobal, IUserStore} from './types';
 import * as EventEmitter from 'events';
 export const captchaList = {};
-
 export class AdminStore {
   static caches: { [key: string]: any } = {};
   static getCaches(key: string) {
@@ -14,20 +13,15 @@ export class AdminStore {
     return AdminStore.caches;
   }
 }
-export class JwtOptions {
-  static options: IJwtOptions = {
-    secret: 'asdhij',
-  };
-  static getOptions() {
-    return JwtOptions.options;
-  }
-  static setOptions(data: IJwtOptions) {
-    if (data) {
-      JwtOptions.options = data;
-    }
-  }
-}
-
+export const Store: { userStore: IUserStore } = {
+  userStore: undefined,
+};
 class MyEmitter extends EventEmitter {}
 
 export const myEmitterInstalled = new MyEmitter();
+export const ADMIN_PARAM_TOKEN = '__ADMIN_PARAM_TOKEN__';
+export const ADMIN_PARAM_INIT_TOKEN = '__ADMIN_PARAM_INIT_TOKEN__';
+
+export const ADMIN_GLOBAL:IAdminGlobal = {
+  header_token:undefined
+}

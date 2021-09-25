@@ -8,6 +8,7 @@ import { Request } from 'express';
 import { AdminUserService, AdminUserEntity } from '../user';
 import { ModuleRef, Reflector } from '@nestjs/core';
 import { ICustomReq } from '../types';
+import {ADMIN_GLOBAL} from '../global.var'
 @Injectable()
 export class AdminAuthGuard implements CanActivate, OnModuleInit {
   private adminUserService: AdminUserService;
@@ -21,16 +22,20 @@ export class AdminAuthGuard implements CanActivate, OnModuleInit {
     if (isPublic) {
       return true;
     }
-    const authorization = req.headers.authorization;
-    if (authorization == undefined) {
+
+    const auth_token = req.headers[ADMIN_GLOBAL.header_token || 'auth-token'];
+    if (auth_token == undefined) {
       return false;
     }
-    const [key, jwtToken] = authorization.split(' ');
     try {
-      const jwt_data = await this.adminUserService.verifyJWT(jwtToken);
+      const auth_data = await this.adminUserService.verifyAuthToken(auth_token);
+      if (auth_data == undefined || !auth_data) {
+        return false;
+      }
       const user = (await this.adminUserService.isExistUser(
-        jwt_data.id,
+        auth_data.id,
       )) as AdminUserEntity;
+      console.log(user);
       req.user = user;
     } catch (err) {
       return false;

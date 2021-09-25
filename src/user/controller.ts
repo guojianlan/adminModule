@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Param,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { WrapController } from 'nestjs-abstract-module';
 import { AdminUserEntity } from './entity';
 import { AdminUserService } from './service';
@@ -10,8 +19,7 @@ import {
   SetUserRoleDto,
 } from './dto';
 import { Request, Response } from 'express';
-import { captchaList } from '../global.var';
-import { AuthPermissionGuard, PublicDecorator } from '../decorators';
+import { AuthGuard, AuthPermissionGuard, PublicDecorator } from '../decorators';
 const CrudController = WrapController({
   model: AdminUserEntity,
 });
@@ -19,7 +27,6 @@ export interface AdminUserControllerImplements {
   loginByUsername: (body: any, ...args: any[]) => any;
   registerByUserName: (body: any, ...args: any[]) => any;
 }
-@AuthPermissionGuard()
 @Controller('admin/user')
 export class AdminUserController
   extends CrudController
@@ -40,22 +47,43 @@ export class AdminUserController
   }
   @Post('loginByUserName')
   @PublicDecorator()
-  async loginByUsername(@Body() body: LoginByUserNameDto, @Req() req: Request) {
+  async loginByUsername(
+    @Body() body: LoginByUserNameDto,
+    @Req() req: Request,
+    @Res({
+      passthrough: true,
+    })
+      res: Response,
+  ) {
     await this.service.checkCode(body.code, req);
     const user = await this.service.loginByUsername(body);
-    const token = await this.service.generateJWT(user);
+    const token = await this.service.generateAuthToken(user);
+    await this.service.deleteCaptcha(res);
     return token;
+  }
+  @AuthGuard()
+  @Post('logout')
+  async logout(@Req() req: any) {
+    if (req.user == undefined) {
+      throw new ForbiddenException();
+    }
+    return this.service.logout(req);
   }
   @Post('registerAdminUser')
   @PublicDecorator()
   async registerAdminUser(
     @Body() body: RegisterByUserNameDto,
     @Req() req: Request,
+    @Res({
+      passthrough: true,
+    })
+      res: Response,
   ) {
     //创建管理员
     const user = await this.service.find();
-    if (user == undefined || user?.list?.length==0) {
+    if (user == undefined || user.list.length == 0) {
       await this.service.checkCode(body.code, req);
+      await this.service.deleteCaptcha(res);
       return this.service.registerByUserName({
         ...body,
       });
@@ -66,8 +94,13 @@ export class AdminUserController
   async registerByUserName(
     @Body() body: RegisterByUserNameDto,
     @Req() req: Request,
+    @Res({
+      passthrough: true,
+    })
+      res: Response,
   ) {
     await this.service.checkCode(body.code, req);
+    await this.service.deleteCaptcha(res);
     return this.service.registerByUserName(body);
   }
   @Get('getCaptcha')
@@ -77,9 +110,7 @@ export class AdminUserController
     @Res({ passthrough: true }) res: Response,
   ) {
     const captcha = await this.service.getCaptcha();
-    captchaList[captcha.text] = true;
     res.cookie('captcha', captcha.text);
-    console.log(captchaList);
     return captcha.data;
   }
   //设置用户角色

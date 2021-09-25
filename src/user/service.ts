@@ -13,12 +13,11 @@ import { isEmail } from 'class-validator';
 import * as svgCaptcha from 'svg-captcha';
 import * as bcrypt from 'bcrypt';
 import { parse } from 'querystring';
-import { captchaList, JwtOptions } from '../global.var';
-import { Request } from 'express';
+import { captchaList, Store } from '../global.var';
+import { Request, Response } from 'express';
 import { AdminUserRoleEntity } from '../user_role';
 import { AdminPermissionEntity } from '../permission';
-import * as jwt from 'jsonwebtoken';
-import { plainToClass } from 'class-transformer';
+import { generateHash } from '../helper';
 @Injectable()
 export class AdminUserService extends AbstractTypeOrmService<AdminUserEntity> {
   // entity: UserEntity;
@@ -101,7 +100,6 @@ export class AdminUserService extends AbstractTypeOrmService<AdminUserEntity> {
     }
     delete user.password;
     return user;
-    return body;
   }
   public async registerByUserName(body: RegisterByUserNameDto) {
     return this.__registerByUserName(body);
@@ -144,7 +142,6 @@ export class AdminUserService extends AbstractTypeOrmService<AdminUserEntity> {
       height: 40,
     });
     captcha.text = bcrypt.hashSync(captcha.text.toLocaleLowerCase(), 8);
-    console.log(JwtOptions.getOptions().secret);
     // console.log(
     //   jwt.verify(
     //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiY3RpbWUiOjE2MzEyOTEwMzcsIm10aW1lIjoxNjMxMjkxMDM3LCJkdGltZSI6MCwibW9iaWxlIjoiMTU5MjAxMTI4NjEiLCJlbWFpbCI6IjQyNDEyMjIzOTc3MjI3QHFxLmNvbSIsImlhdCI6MTYzMTc1MjQzNX0.jnKy6qyahqYivWYcIlkbd05xzm_jCeIUFOWoSLdw9kc',
@@ -163,13 +160,16 @@ export class AdminUserService extends AbstractTypeOrmService<AdminUserEntity> {
     if (captcha == undefined) {
       throw new BadRequestException('请获取验证码');
     }
-    if (!captchaList[captcha as string]) {
-      throw new BadRequestException('验证码不存在');
-    }
+    // if (!captchaList[captcha as string]) {
+    //   throw new BadRequestException('验证码不存在');
+    // }
     if (!(await this.validateCaptcha(code, captcha as string))) {
       throw new BadRequestException('验证码错误');
     }
-    delete captchaList[captcha as string];
+    // delete captchaList[captcha as string];
+  }
+  public async deleteCaptcha(res: Response) {
+    res.cookie('captcha', '', { maxAge: 0 });
   }
   public async isExistUser(id) {
     return await this.findOne(id);
@@ -264,15 +264,32 @@ export class AdminUserService extends AbstractTypeOrmService<AdminUserEntity> {
     }
     return [];
   }
-  public async generateJWT(data: any) {
+  public async logout(req: Request) {
+    const auth_token = req.headers['auth-token'];
+    if (auth_token) {
+      if (await Store.userStore.remove(auth_token)) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+  public async generateAuthToken(data: any) {
     const payload = Object.assign({}, data);
-    const token = jwt.sign(payload, JwtOptions.getOptions().secret);
+    const token = await Store.userStore.set(
+      generateHash(),
+      JSON.stringify({
+        id: payload.id,
+      }),
+    );
     return token;
   }
-  public async verifyJWT(token) {
-    return jwt.verify(
-      token,
-      JwtOptions.getOptions().secret,
-    ) as unknown as AdminUserEntity;
+  public async verifyAuthToken(token) {
+    try {
+      const value = (await Store.userStore.get(token)) as string;
+      return JSON.parse(value);
+    } catch (e) {
+      throw e;
+    }
   }
 }
