@@ -1,6 +1,6 @@
 {
-  "name": "nestjs-admin-module",
-  "version": "1.0.5",
+  "name": "@guojian/nestjs-admin-module",
+  "version": "1.0.0",
   "description": "nestjs common admin crud module controller service",
   "main": "dist/index.js",
   "files": [
@@ -34,7 +34,7 @@
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
-    "nestjs-abstract-module": "^1.1.9",
+    "@guojian/nestjs-abstract-module": "^1.0.0",
     "rxjs": "^7.2.0",
     "svg-captcha": "^1.4.0"
   },

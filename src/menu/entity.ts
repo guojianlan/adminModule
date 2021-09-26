@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm';
-import { AbstractTypeEntity } from 'nestjs-abstract-module';
+import { AbstractTypeEntity } from '@guojian/nestjs-abstract-module';
 import { isEmail, IsNotEmpty } from 'class-validator';
 
 @Entity('admin_menu',{

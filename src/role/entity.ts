@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm';
-import { AbstractTypeEntity } from 'nestjs-abstract-module';
+import { AbstractTypeEntity } from '@guojian/nestjs-abstract-module';
 
 @Entity('admin_role',{
   synchronize: false

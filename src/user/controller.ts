@@ -8,7 +8,7 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { WrapController } from 'nestjs-abstract-module';
+import { WrapController } from '@guojian/nestjs-abstract-module';
 import { AdminUserEntity } from './entity';
 import { AdminUserService } from './service';
 import {

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { WrapController } from 'nestjs-abstract-module';
+import { WrapController } from '@guojian/nestjs-abstract-module';
 import { AdminRoleEntity } from './entity';
 import { AdminRoleService } from './service';
 import { SetRoleMenuDto, SetRolePermissionDto } from './dto';

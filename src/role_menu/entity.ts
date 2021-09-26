@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm';
-import { AbstractTypeEntity } from 'nestjs-abstract-module';
+import { AbstractTypeEntity } from '@guojian/nestjs-abstract-module';
 import { AdminRoleEntity } from '../role';
 import { AdminMenuEntity } from '../menu';
 @Entity('admin_role_menu',{

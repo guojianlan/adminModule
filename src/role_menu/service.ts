@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   AbstractServiceExtraOptions,
   AbstractTypeOrmService,
-} from 'nestjs-abstract-module';
+} from '@guojian/nestjs-abstract-module';
 import { Repository } from 'typeorm';
 import { AdminRoleMenuEntity } from './entity';
 @Injectable()

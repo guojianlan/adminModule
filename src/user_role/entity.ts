@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { AbstractTypeEntity } from 'nestjs-abstract-module';
+import { AbstractTypeEntity } from '@guojian/nestjs-abstract-module';
 import { AdminUserEntity } from '../user';
 import { AdminRoleEntity } from '../role';
 

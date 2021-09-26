@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm';
-import { AbstractTypeEntity } from 'nestjs-abstract-module';
+import { AbstractTypeEntity } from '@guojian/nestjs-abstract-module';
 import { RequestMethods } from '../types';
 import { IsNotEmpty } from 'class-validator';
 
