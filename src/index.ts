@@ -7,3 +7,4 @@ export * from './role_menu';
 export * from './global.var';
 export * from './types';
 export * from './helper';
+export * from './decorators'

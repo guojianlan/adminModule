@@ -1,20 +1,20 @@
 import {
   CanActivate,
-  ExecutionContext,
+  ExecutionContext, forwardRef, Inject,
   Injectable,
   OnModuleInit,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AdminUserEntity, AdminUserService } from '../user';
-import { ModuleRef, Reflector } from '@nestjs/core';
+import { AdminUserService } from '../user';
+import {  Reflector } from '@nestjs/core';
 import { ICustomReq } from '../types';
 @Injectable()
-export class AdminPermissionGuard implements CanActivate, OnModuleInit {
-  private adminUserService: AdminUserService;
-  constructor(private moduleRef: ModuleRef, private reflector: Reflector) {}
-  async onModuleInit() {
-    this.adminUserService = await this.moduleRef.get(AdminUserService);
-  }
+export class AdminPermissionGuard implements CanActivate {
+  constructor(
+    @Inject(forwardRef(() => AdminUserService))
+    private adminUserService: AdminUserService,
+    private reflector: Reflector,
+  ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.get<any>('public', context.getHandler());
     if (isPublic) {

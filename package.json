@@ -1,6 +1,6 @@
 {
   "name": "@guojian/nestjs-admin-module",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "nestjs common admin crud module controller service",
   "main": "dist/index.js",
   "files": [
